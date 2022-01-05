@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+
+source env.prod
+
+az account set --subscription $SUBSCRIPTION
+
+az group delete \
+	--subscription ${SUBSCRIPTION} \
+   	--name ${RESOURCE_GROUP} \
+    --yes

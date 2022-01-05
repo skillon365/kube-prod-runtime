@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package generic
+package skillon365
 
 import (
 	"context"
@@ -28,7 +28,7 @@ import (
 	"github.com/bitnami/kube-prod-runtime/kubeprod/tools"
 )
 
-func (conf *GenericConfig) Generate(ctx context.Context) error {
+func (conf *SkillON365Config) Generate(ctx context.Context) error {
 	flags := conf.flags
 
 	// Leaks secrets to log!
@@ -88,11 +88,11 @@ func (conf *GenericConfig) Generate(ctx context.Context) error {
 	}
 
 	if conf.Keycloak.Realm == "" {
-		conf.Keycloak.Realm = "BKPR"
+		conf.Keycloak.Realm = "skillon365"
 	}
 
 	if conf.Keycloak.ClientID == "" {
-		conf.Keycloak.ClientID = "bkpr"
+		conf.Keycloak.ClientID = "skillon365"
 	}
 
 	if conf.Keycloak.ClientSecret == "" {
@@ -100,20 +100,16 @@ func (conf *GenericConfig) Generate(ctx context.Context) error {
 	}
 
 	//
-	// powerdns setup
+	// cloudflare setup
 	//
-	log.Debug("Starting powerdns setup")
+	log.Debug("Starting cloudflare setup")
 
-	if conf.PowerDNS.ApiKey == "" {
-		conf.PowerDNS.ApiKey = uuid.New().String()
-	}
-
-	if conf.PowerDNS.DatabasePassword == "" {
-		rand, err := tools.Base64RandBytes(24)
+	if conf.Cloudflare.ApiToken == "" {
+		token, err := flags.GetString(flagCloudflareToken)
 		if err != nil {
 			return err
 		}
-		conf.PowerDNS.DatabasePassword = rand
+		conf.Cloudflare.ApiToken = token
 	}
 
 	//
@@ -140,7 +136,7 @@ func (conf *GenericConfig) Generate(ctx context.Context) error {
 		conf.OauthProxy.AuthzDomain = domain
 	}
 
-	log.Infof("Execute the following command to get the external IP address for the PowerDNS NS")
+	log.Infof("Execute the following command to get the external IP address for the Cloudflare NS")
 	log.Infof("  kubectl -n kubeprod get svc nginx-ingress-udp -o jsonpath='{.status.loadBalancer.ingress[0].ip}'\"")
 	log.Infof("You will need to ensure glue records exist for %s pointing to the NS", conf.DnsZone)
 

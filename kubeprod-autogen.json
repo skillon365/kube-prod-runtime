@@ -1,0 +1,23 @@
+{
+  "dnsZone": "skillon365.com",
+  "contactEmail": "admin@skillon365.com",
+  "keycloak": {
+    "realm": "skillon365",
+    "db_password": "ze9VVbfrc4Y1MVnfpnvnlZ1oJ0pMzAa7",
+    "admin_password": "ai0iChoh8ivie=ch4ohz5Jee1di1yahj",
+    "client_id": "skillon365",
+    "client_secret": "7a76b389-ff3f-4b27-b03a-839edd98a501",
+    "group": ""
+  },
+  "cloudflare": {
+    "api_token": "-7KiFzKvcPjwGeph-nUd1veRYdJYHoHduE9pGb3x"
+  },
+  "oauthProxy": {
+    "cookie_secret": "O9H7C8X8eReMWyQ3BL22VRj8sHfc8Qdz",
+    "authz_domain": "*"
+  },
+  "mariadbGalera": {
+    "root_password": "HM4uRbi5yz0DnDdQh7p2EJkj3x5S7b/9",
+    "mariabackup_password": "zM8hb5qncK9SoCpBk8SPL/EY4UwCLRMM"
+  }
+}

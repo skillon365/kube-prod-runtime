@@ -19,21 +19,16 @@
 
 // Test GKE
 
-(import "../platforms/generic.jsonnet") {
-  letsencrypt_contact_email: "noone@nowhere.com",
+(import "../platforms/skillon365.jsonnet") {
   config: {
-    dnsZone: "test.example.com",
-    powerDns: {
-      api_key: "powerdns_api_key",
-      db_password: "mydbpassword",
-    },
+    dnsZone: "test.skillon365.com",
     keycloak: {
       db_password: "mydbpassword",
       admin_password: "myadminpassword",
       client_id: "myclientid",
       client_secret: "mysecret",
       group: "",
-      realm: "BKPR",
+      realm: "skillon365",
     },
     oauthProxy: {
       cookie_secret: "cookiesecret",

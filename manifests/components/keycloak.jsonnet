@@ -37,7 +37,7 @@ local KEYCLOAK_DEPLOYMENTS_MOUNTPOINT = "/opt/jboss/keycloak/standalone/deployme
 
 local KEYCLOAK_METRICS_PATH = "/auth/realms/master/metrics";
 
-local bkpr_realm_json_tmpl = importstr "keycloak/bkpr_realm_json_tmpl";
+local realm_json_tmpl = importstr "keycloak/realm_json_tmpl";
 
 {
   p:: "",
@@ -56,13 +56,16 @@ local bkpr_realm_json_tmpl = importstr "keycloak/bkpr_realm_json_tmpl";
   secret: utils.HashedSecret($.p + "keycloak") + $.metadata {
     local this = self,
     data_+: {
-      "bkpr-realm.json": std.format(
-        bkpr_realm_json_tmpl, [
+      "realm.json": std.format(
+        realm_json_tmpl, [
+          this.data_.realm,
+          this.data_.realm,
           this.data_.client_id,
           this.data_.client_secret,
           "https://%s/oauth2/callback" % $.oauth2_proxy.ingress.host,
         ]
       ),
+      realm: error "realm is required",
       client_id: error "client_id is required",
       client_secret: error "client_secret is required",
       admin_password: error "admin_password is required",
@@ -106,7 +109,7 @@ local bkpr_realm_json_tmpl = importstr "keycloak/bkpr_realm_json_tmpl";
               args+: [
                 "-b=0.0.0.0",
                 "-c=standalone.xml",
-                "-Dkeycloak.import=/realm/bkpr-realm.json",
+                "-Dkeycloak.import=/realm/realm.json",
               ],
               securityContext: {
                 runAsNonRoot: true,

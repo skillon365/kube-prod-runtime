@@ -1,0 +1,60 @@
+#!/usr/bin/bash
+
+source env.prod
+
+az account set --subscription ${SUBSCRIPTION}
+
+az group create \
+    --name ${RESOURCE_GROUP} \
+    --subscription ${SUBSCRIPTION} \
+    --location ${LOCATION}
+
+az aks create \
+	--subscription ${SUBSCRIPTION} \
+    --resource-group ${RESOURCE_GROUP} \
+    --name ${AKS_CLUSTER} \
+    --generate-ssh-keys \
+    --kubernetes-version ${AKS_K8S_VERSION} \
+    --nodepool-name system \
+    --vm-set-type VirtualMachineScaleSets \
+    --load-balancer-sku standard \
+    --enable-cluster-autoscaler \
+    --node-vm-size ${VM_SIZE} \
+    --node-osdisk-size ${DISK_SIZE} \
+    --node-count 1 \
+    --min-count 1 \
+    --max-count 1
+
+az aks get-credentials \
+	--subscription ${SUBSCRIPTION} \
+	--resource-group ${RESOURCE_GROUP} \
+    --name ${AKS_CLUSTER} \
+    --overwrite-existing
+
+# az aks nodepool add \
+# 	--subscription ${SUBSCRIPTION} \
+#     --resource-group ${RESOURCE_GROUP} \
+#     --cluster-name ${AKS_CLUSTER} \
+#     --name spot \
+#     --priority Spot \
+#     --spot-max-price -1 \
+#     --eviction-policy Delete \
+#     --node-vm-size ${VM_SIZE} \
+#     --node-osdisk-size ${DISK_SIZE} \
+#     --enable-cluster-autoscaler \
+#     --node-count 1 \
+#     --min-count 1 \
+#     --max-count 3
+
+# Error: current version of clusterctl is only compatible with v1beta1 providers, detected v1alpha4 for provider infrastructure-azure
+# kubectl delete secret "${CLUSTER_IDENTITY_SECRET_NAME}" || true
+# kubectl create secret generic "${CLUSTER_IDENTITY_SECRET_NAME}" --from-literal=clientSecret="${CLIENT_SECRET}"
+# clusterctl init --infrastructure azure
+
+./kubeprod/bin/kubeprod install "${PLATFORM}" \
+    --email "${ADMIN}" \
+    --dns-zone "${DNS_ZONE}" \
+    --manifests ./manifests \
+    --cloudflare-token "${CLOUDFLARE_TOKEN}" \
+    --keycloak-password "${KEYCLOAK_PASSWORD}" \
+    --keycloak-group "${KEYCLOAK_GROUP}"

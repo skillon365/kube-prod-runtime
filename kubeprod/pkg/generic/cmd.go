@@ -33,6 +33,7 @@ const (
 	flagAuthzDomain      = "authz-domain"
 	flagKeycloakPassword = "keycloak-password"
 	flagKeycloakGroup    = "keycloak-group"
+	flagKeycloakRealm    = "keycloak-realm"
 )
 
 var genericCmd = &cobra.Command{
@@ -56,6 +57,7 @@ func init() {
 	genericCmd.PersistentFlags().String(flagAuthzDomain, "", "Restrict authorized users to this Google email domain")
 	genericCmd.PersistentFlags().String(flagKeycloakGroup, "", "Restrict authorized users to this Keycloak group")
 	genericCmd.PersistentFlags().String(flagKeycloakPassword, "", "Password for Keycloak admin user")
+	genericCmd.PersistentFlags().String(flagKeycloakRealm, "BKPR", "Keycloak Realm for kubeprod services")
 	genericCmd.MarkPersistentFlagRequired(flagAuthzDomain)
 	genericCmd.MarkPersistentFlagRequired(flagKeycloakGroup)
 	genericCmd.MarkPersistentFlagRequired(flagKeycloakPassword)

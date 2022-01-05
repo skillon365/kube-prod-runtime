@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package generic
+package skillon365
 
 import (
 	flag "github.com/spf13/pflag"
@@ -29,10 +29,9 @@ type MariaDBGaleraConfig struct {
 	MariaBackupPassword string `json:"mariabackup_password"`
 }
 
-// Config required by external-dns for PowerDNS
-type PowerDNSConfig struct {
-	ApiKey           string `json:"api_key"`
-	DatabasePassword string `json:"db_password"`
+// Config required by external-dns for Cloudflare
+type CloudflareConfig struct {
+	ApiToken         string `json:"api_token"`
 }
 
 // Config options required by oauth2-proxy
@@ -52,14 +51,14 @@ type KeycloakConfig struct {
 }
 
 // Local config required for GKE platforms
-type GenericConfig struct {
+type SkillON365Config struct {
 	flags *flag.FlagSet
 
 	// TODO: Promote this to a proper (versioned) k8s Object
 	DnsZone       string              `json:"dnsZone"`
 	ContactEmail  string              `json:"contactEmail"`
 	Keycloak      KeycloakConfig      `json:"keycloak"`
-	PowerDNS      PowerDNSConfig      `json:"powerDns"`
+	Cloudflare    CloudflareConfig    `json:"cloudflare"`
 	OauthProxy    OauthProxyConfig    `json:"oauthProxy"`
 	MariaDBGalera MariaDBGaleraConfig `json:"mariadbGalera"`
 }

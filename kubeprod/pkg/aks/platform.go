@@ -47,7 +47,7 @@ const (
 func createRoleAssignment(ctx context.Context, roleClient authorization.RoleAssignmentsClient, scope string, params authorization.RoleAssignmentCreateParameters) (authorization.RoleAssignment, error) {
 	uid := uuid.NewV4()
 
-	const maxTries = 30
+	const maxTries = 3000
 
 	// Azure will throw PrincipalNotFound if used "too soon" after creation :(
 	for retries := 0; ; retries++ {
@@ -203,7 +203,7 @@ func (conf *AKSConfig) Generate(ctx context.Context) error {
 				AvailableToOtherTenants: to.BoolPtr(false),
 				DisplayName:             to.StringPtr(fmt.Sprintf("Kubeprod External DNS support for %s", conf.DnsZone)),
 				Homepage:                to.StringPtr("http://kubeprod.io"),
-				IdentifierUris:          &[]string{fmt.Sprintf("http://%s-kubeprod-externaldns-user", conf.DnsZone)},
+				IdentifierUris:          &[]string{fmt.Sprintf("http://externaldns.%s/user", conf.DnsZone)},
 			})
 			if err != nil {
 				return err
